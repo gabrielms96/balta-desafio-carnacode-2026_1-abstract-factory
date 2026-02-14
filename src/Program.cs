@@ -1,4 +1,6 @@
-﻿using balta_desafio_carnacode_2026_1_abstract_factory.Factories;
+﻿using balta_desafio_carnacode_2026_1_abstract_factory.Abstractions;
+using balta_desafio_carnacode_2026_1_abstract_factory.Factories;
+using balta_desafio_carnacode_2026_1_abstract_factory.Services;
 
 namespace balta_desafio_carnacode_2026_1_abstract_factory.Gateways.MercadoPago
 {
@@ -15,72 +17,50 @@ namespace balta_desafio_carnacode_2026_1_abstract_factory.Gateways.MercadoPago
 
         public static void ExecutePagSeguroPayment()
         {
-            Console.WriteLine("Processing payment with PagSeguro...");
+            Console.WriteLine("Payment initiated with PagSeguro...");
 
-            var factory = new PagSeguroFactory();
-            var cardValidator = factory.CreateCardValidator();
-            var paymentProcessor = factory.CreatePaymentProcessor();
-            var transactionLogger = factory.CreateTransactionLogger();
+            IPaymentGatewayFactory pagSeguroFactory = new PagSeguroFactory();
+            var pagSeguroService = new PaymentService(pagSeguroFactory);
+
             string cardNumber = "1234567890123456";
             decimal amount = 150.00m;
-            if (cardValidator.ValidateCard(cardNumber))
-            {
-                string transactionId = paymentProcessor.ProcessTransaction(amount, cardNumber);
-                transactionLogger.Log($"Transaction successful: {transactionId}");
-            }
-            else
-            {
-                transactionLogger.Log("Transaction failed: Invalid card number.");
-            }
+
+            pagSeguroService.ProcessPayment(amount, cardNumber);
+
+            Console.WriteLine("Payment completed via PagSeguro...");
+            Console.WriteLine("-----------------------------------");
         }
 
         public static void ExecuteMercadoPagoPayment()
         {
-            Console.WriteLine("Processing payment with MercadoPago...");
+            Console.WriteLine("Payment initiated with MercadoPago...");
 
-            var factory = new MercadoPagoFactory();
-            var cardValidator = factory.CreateCardValidator();
-            var paymentProcessor = factory.CreatePaymentProcessor();
-            var transactionLogger = factory.CreateTransactionLogger();
+            IPaymentGatewayFactory mercadoPagoFactory = new MercadoPagoFactory();
+            var mercadoPagoService = new PaymentService(mercadoPagoFactory);
+
             string cardNumber = "5234567890123456";
             decimal amount = 200.00m;
-            if (cardValidator.ValidateCard(cardNumber))
-            {
-                string transactionId = paymentProcessor.ProcessTransaction(amount, cardNumber);
-                transactionLogger.Log($"Transaction successful: {transactionId}");
-            }
-            else
-            {
-                transactionLogger.Log("Transaction failed: Invalid card number.");
-            }
+
+            mercadoPagoService.ProcessPayment(amount, cardNumber);
+
+            Console.WriteLine("Payment completed via MercadoPago...");
+            Console.WriteLine("-----------------------------------");
         }
 
         public static void ExecuteStripePayment()
         {
-            Console.WriteLine("Processing payment with Stripe...");
+            Console.WriteLine("Payment initiated with Stripe...");
 
-            var factory = new StripeFactory();
-            var cardValidator = factory.CreateCardValidator();
-            var paymentProcessor = factory.CreatePaymentProcessor();
-            var transactionLogger = factory.CreateTransactionLogger();
+            IPaymentGatewayFactory stripeFactory = new StripeFactory();
+            var stripeService = new PaymentService(stripeFactory);
+
             string cardNumber = "4234567890123456";
             decimal amount = 250.00m;
-            if (cardValidator.ValidateCard(cardNumber))
-            {
-                string transactionId = paymentProcessor.ProcessTransaction(amount, cardNumber);
-                transactionLogger.Log($"Transaction successful: {transactionId}");
-            }
-            else
-            {
-                transactionLogger.Log("Transaction failed: Invalid card number.");
-            }
+
+            stripeService.ProcessPayment(amount, cardNumber);
+
+            Console.WriteLine("Payment completed via Stripe...");
+            Console.WriteLine("-----------------------------------");
         }
     }
 }
-
-
-
-
-
-
-
